@@ -41,6 +41,22 @@ public class AlpaoDeformableMirror implements Closeable
 		if (isError(lLastErrorString))
 			return false;
 
+		Runtime.getRuntime().addShutdownHook(new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					close();
+				}
+				catch (Throwable e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+
 		return true;
 	}
 
@@ -48,9 +64,13 @@ public class AlpaoDeformableMirror implements Closeable
 	{
 		synchronized (mLock)
 		{
+			if (mDevicePointer == null)
+				return;
+
 			if (isDebugPrintout())
 				System.out.println("ASDKLibrary.asdkRelease(...");
 			ASDKLibrary.asdkRelease(mDevicePointer);
+			mDevicePointer = null;
 			if (isDebugPrintout())
 				printLastError();
 
@@ -196,8 +216,6 @@ public class AlpaoDeformableMirror implements Closeable
 			return true;
 		}
 	}
-
-
 
 	private boolean isError(String pErrorString)
 	{
