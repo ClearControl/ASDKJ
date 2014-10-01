@@ -15,7 +15,7 @@ public class AlpaoDeformableMirrorDemo
 {
 
 	@Test
-	public void demo() throws IOException
+	public void demo() throws IOException, InterruptedException
 	{
 		String lSerialName = "BIL118\0";
 
@@ -29,17 +29,23 @@ public class AlpaoDeformableMirrorDemo
 
 		assertTrue(lAlpaoDeformableMirror.setInputTriggerMode(TriggerMode.Disabled));
 
-		double[] lMirrorShape = new double[lNumberOfActuators];
-		for (int i = 0; i < lNumberOfActuators; i++)
-			lMirrorShape[i] = 0.1 * (2 * random() - 1);
+		for (int j = 0; j < 100; j++)
+		{
+			double[] lMirrorShape = new double[lNumberOfActuators];
+			for (int i = 0; i < lNumberOfActuators; i++)
+				lMirrorShape[i] = 0.1 * (2 * random() - 1);
 
-		assertTrue(lAlpaoDeformableMirror.sendRawMirrorShapeVector(lMirrorShape));
+			assertTrue(lAlpaoDeformableMirror.sendRawMirrorShapeVector(lMirrorShape));
+			Thread.sleep(100);
+		}
 
 		int lNumberOfMirrorShapes = 100;
-		double[] lMultipleMirrorShapes = new double[lNumberOfActuators*lNumberOfMirrorShapes];
+		double[] lMultipleMirrorShapes = new double[lNumberOfActuators * lNumberOfMirrorShapes];
+
 		for (int i = 0; i < lMultipleMirrorShapes.length; i++)
 			lMultipleMirrorShapes[i] = 0.01 * (2 * random() - 1);
 
+		/*
 		assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
 																																							lNumberOfMirrorShapes,
 																																							1));
@@ -49,6 +55,7 @@ public class AlpaoDeformableMirrorDemo
 		assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
 																																							lNumberOfMirrorShapes,
 																																							1));
+																																							/**/
 
 		lAlpaoDeformableMirror.close();
 
