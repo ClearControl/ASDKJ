@@ -1,6 +1,5 @@
 package asdk;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 import org.bridj.Pointer;
@@ -8,7 +7,7 @@ import org.bridj.Pointer;
 import asdk.bindings.ASDKLibrary;
 import asdk.bindings.ASDKLibrary.DM;
 
-public class AlpaoDeformableMirror implements Closeable
+public class AlpaoDeformableMirror implements AutoCloseable
 {
 	private Object mLock = new Object();
 
@@ -60,6 +59,7 @@ public class AlpaoDeformableMirror implements Closeable
 		return true;
 	}
 
+	@Override
 	public void close() throws IOException
 	{
 		synchronized (mLock)
