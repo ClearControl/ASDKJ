@@ -118,8 +118,11 @@ public class AlpaoDeformableMirror implements AutoCloseable
 
 	public boolean sendFlatMirrorShapeVector()
 	{
-		return mDebugPrintout;
+		final int lMatrixHeightWidth = AlpaoDeformableMirrorsSpecifications.getFullMatrixHeightWidth(getNumberOfActuators());
+		Pointer<Double> lPointerToDoubles = Pointer.pointerToDoubles(new double[lMatrixHeightWidth * lMatrixHeightWidth]);
+		sendFullMatrixMirrorShapeVector(lPointerToDoubles);
 
+		return true;
 	}
 
 	public boolean sendFullMatrixMirrorShapeVector(Pointer<Double> pFullMatrixMirrorShapeVectorDoubleBuffer)
