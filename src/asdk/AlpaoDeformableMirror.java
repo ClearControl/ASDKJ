@@ -9,9 +9,9 @@ import asdk.bindings.ASDKLibrary.DM;
 
 public class AlpaoDeformableMirror implements AutoCloseable
 {
-	private Object mLock = new Object();
+	private final Object mLock = new Object();
 
-	private String mAlpaoDeviceSerialName;
+	private final String mAlpaoDeviceSerialName;
 	private Pointer<DM> mDevicePointer;
 	private boolean mDebugPrintout = false;
 
@@ -28,7 +28,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 	{
 		if (mDevicePointer != null)
 			return false;
-		Pointer<Byte> lPointerToSerialNumber = Pointer.pointerToCString(mAlpaoDeviceSerialName);
+		final Pointer<Byte> lPointerToSerialNumber = Pointer.pointerToCString(mAlpaoDeviceSerialName);
 		if (isDebugPrintout())
 			System.out.println("ASDKLibrary.asdkInit(...");
 		mDevicePointer = ASDKLibrary.asdkInit(lPointerToSerialNumber);
@@ -36,7 +36,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 		if (isDebugPrintout())
 			printLastError();
 
-		String lLastErrorString = getLastErrorString();
+		final String lLastErrorString = getLastErrorString();
 		if (isError(lLastErrorString))
 			return false;
 
@@ -49,7 +49,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 				{
 					close();
 				}
-				catch (Throwable e)
+				catch (final Throwable e)
 				{
 					e.printStackTrace();
 				}
@@ -74,7 +74,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 			if (isDebugPrintout())
 				printLastError();
 
-			String lLastErrorString = getLastErrorString();
+			final String lLastErrorString = getLastErrorString();
 			if (isError(lLastErrorString))
 				throw new AlpaoException("ALPAO:" + lLastErrorString);
 
@@ -83,7 +83,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 
 	public int getNumberOfActuators()
 	{
-		Pointer<Double> lPointerToNumberOfActuators = Pointer.allocateDouble();
+		final Pointer<Double> lPointerToNumberOfActuators = Pointer.allocateDouble();
 		if (isDebugPrintout())
 			System.out.println("ASDKLibrary.asdkGet(...NbOfActuator...");
 		ASDKLibrary.asdkGet(mDevicePointer,
@@ -91,7 +91,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 												lPointerToNumberOfActuators);
 		if (isDebugPrintout())
 			printLastError();
-		int lNumberOfActuators = (int) lPointerToNumberOfActuators.getDouble();
+		final int lNumberOfActuators = (int) lPointerToNumberOfActuators.getDouble();
 		lPointerToNumberOfActuators.release();
 		if (isDebugPrintout())
 			System.out.println("lNumberOfActuators=" + lNumberOfActuators);
@@ -109,7 +109,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 		if (isDebugPrintout())
 			printLastError();
 
-		String lLastErrorString = getLastErrorString();
+		final String lLastErrorString = getLastErrorString();
 		if (isError(lLastErrorString))
 			return false;
 
@@ -119,17 +119,25 @@ public class AlpaoDeformableMirror implements AutoCloseable
 	public boolean sendFlatMirrorShapeVector()
 	{
 		final int lMatrixHeightWidth = AlpaoDeformableMirrorsSpecifications.getFullMatrixHeightWidth(getNumberOfActuators());
-		Pointer<Double> lPointerToDoubles = Pointer.pointerToDoubles(new double[lMatrixHeightWidth * lMatrixHeightWidth]);
+		final Pointer<Double> lPointerToDoubles = Pointer.pointerToDoubles(new double[lMatrixHeightWidth * lMatrixHeightWidth]);
 		sendFullMatrixMirrorShapeVector(lPointerToDoubles);
 
 		return true;
+	}
+
+	public boolean sendFullMatrixMirrorShapeVector(double[] pFullMatrixMirrorShapeVector)
+	{
+		final Pointer<Double> lPointerToDoubles = Pointer.pointerToDoubles(pFullMatrixMirrorShapeVector);
+		final boolean lReturnValue = sendFullMatrixMirrorShapeVector(lPointerToDoubles);
+		lPointerToDoubles.release();
+		return lReturnValue;
 	}
 
 	public boolean sendFullMatrixMirrorShapeVector(Pointer<Double> pFullMatrixMirrorShapeVectorDoubleBuffer)
 	{
 		checkVectorDimensions(pFullMatrixMirrorShapeVectorDoubleBuffer,
 													AlpaoDeformableMirrorsSpecifications.getFullMatrixLength(getNumberOfActuators()));
-		Pointer<Double> lRawMirrorShapeVectorDoubleBuffer = removeNonExistantCornerActuators(pFullMatrixMirrorShapeVectorDoubleBuffer);
+		final Pointer<Double> lRawMirrorShapeVectorDoubleBuffer = removeNonExistantCornerActuators(pFullMatrixMirrorShapeVectorDoubleBuffer);
 
 		return sendRawMirrorShapeVector(lRawMirrorShapeVectorDoubleBuffer);
 
@@ -160,8 +168,8 @@ public class AlpaoDeformableMirror implements AutoCloseable
 
 	public boolean sendRawMirrorShapeVector(double[] pMirrorShape)
 	{
-		Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShape);
-		boolean lReturnValue = sendRawMirrorShapeVector(lPointerToDoubleArray);
+		final Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShape);
+		final boolean lReturnValue = sendRawMirrorShapeVector(lPointerToDoubleArray);
 		lPointerToDoubleArray.release();
 		return lReturnValue;
 	}
@@ -176,7 +184,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 			if (isDebugPrintout())
 				printLastError();
 
-			String lLastErrorString = getLastErrorString();
+			final String lLastErrorString = getLastErrorString();
 			if (isError(lLastErrorString))
 				return false;
 
@@ -189,8 +197,8 @@ public class AlpaoDeformableMirror implements AutoCloseable
 																												final int pNumberOfRepeats)
 	{
 
-		Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShape);
-		boolean lReturnValue = sendMirrorShapeSequenceAsynchronously(	lPointerToDoubleArray,
+		final Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShape);
+		final boolean lReturnValue = sendMirrorShapeSequenceAsynchronously(	lPointerToDoubleArray,
 																																	pNumberOfPatterns,
 																																	pNumberOfRepeats);
 		lPointerToDoubleArray.release();
@@ -212,7 +220,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 			if (isDebugPrintout())
 				printLastError();
 
-			String lLastErrorString = getLastErrorString();
+			final String lLastErrorString = getLastErrorString();
 			if (isError(lLastErrorString))
 				return false;
 
@@ -229,11 +237,11 @@ public class AlpaoDeformableMirror implements AutoCloseable
 	{
 		synchronized (mLock)
 		{
-			Pointer<Integer> errorNo = Pointer.allocateInt();
-			Pointer<Byte> errMsg = Pointer.allocateBytes(256);
-			long errSize = 256;
+			final Pointer<Integer> errorNo = Pointer.allocateInt();
+			final Pointer<Byte> errMsg = Pointer.allocateBytes(256);
+			final long errSize = 256;
 			ASDKLibrary.asdkGetLastError(errorNo, errMsg, errSize);
-			String lErrorString = new String(errMsg.getBytes());
+			final String lErrorString = new String(errMsg.getBytes());
 			errorNo.release();
 			errMsg.release();
 			return lErrorString;
@@ -271,7 +279,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 	{
 		if (pVector.getValidElements() != pExpectedVectorLength)
 		{
-			String lExceptionMessage = String.format(	"Provided vector has wrong length %d should be %d",
+			final String lExceptionMessage = String.format(	"Provided vector has wrong length %d should be %d",
 																								pVector.getValidElements(),
 																								pExpectedVectorLength);
 			throw new AlpaoException(lExceptionMessage);
