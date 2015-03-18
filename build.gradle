@@ -98,7 +98,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 
 group = 'net.rtlib'
-version = '1'
+version = '1.0'
 
 artifacts
 {
@@ -132,9 +132,9 @@ if(hasProperty('bintray_user') && hasProperty('bintray_key') )
 			userOrg = 'rtlib' //An optional organization name when the repo belongs to one of the user's orgs
 			name = project.name
 			desc = project.name
-			websiteUrl = 'https://github.com/orgs/RTlib'
-			issueTrackerUrl = 'https://github.com/RTlib/RTlib/issues'
-			vcsUrl = 'https://github.com/RTlib/RTlib.git'
+			websiteUrl = 'https://github.com/RTlib/ASDKJ'
+			issueTrackerUrl = 'https://github.com/RTlib/ASDKJ/issues'
+			vcsUrl = 'https://github.com/RTlib/ASDKJ.git'
 			//licenses = ['Apache-2.0']
 			labels = [
 				'RTlib',
@@ -148,10 +148,10 @@ if(hasProperty('bintray_user') && hasProperty('bintray_key') )
 			//attributes= ['a': ['ay1', 'ay2'], 'b': ['bee'], c: 'cee'] //Optional package-level attributes
 			//Optional version descriptor
 			version {
-				name = '${project.version}' //Bintray logical version name
+				name = project.version //Bintray logical version name
 				desc = '.'
 				released  = new java.util.Date()
-				vcsTag = '${project.version}'
+				vcsTag = project.version
 				/*attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin'] //Optional version-level attributes
 				 gpg {
 				 sign = false //Determines whether to GPG sign the files. The default is false
