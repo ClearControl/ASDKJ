@@ -192,12 +192,12 @@ public class AlpaoDeformableMirror implements AutoCloseable
 		}
 	}
 
-	public boolean sendMirrorShapeSequenceAsynchronously(	double[] pMirrorShape,
+	public boolean sendMirrorShapeSequenceAsynchronously(	double[] pMirrorShapeSequence,
 																												final int pNumberOfPatterns,
 																												final int pNumberOfRepeats)
 	{
 
-		final Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShape);
+		final Pointer<Double> lPointerToDoubleArray = Pointer.pointerToDoubles(pMirrorShapeSequence);
 		final boolean lReturnValue = sendMirrorShapeSequenceAsynchronously(	lPointerToDoubleArray,
 																																	pNumberOfPatterns,
 																																	pNumberOfRepeats);
@@ -205,7 +205,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 		return lReturnValue;
 	}
 
-	public boolean sendMirrorShapeSequenceAsynchronously(	Pointer<Double> pMirrorShape,
+	public boolean sendMirrorShapeSequenceAsynchronously(	Pointer<Double> pMirrorShapeSequence,
 																												final int pNumberOfPatterns,
 																												final int pNumberOfRepeats)
 	{
@@ -214,7 +214,7 @@ public class AlpaoDeformableMirror implements AutoCloseable
 			if (isDebugPrintout())
 				System.out.println("ASDKLibrary.asdkSend(...");
 			ASDKLibrary.asdkSendPattern(mDevicePointer,
-																	pMirrorShape,
+																	pMirrorShapeSequence,
 																	pNumberOfPatterns,
 																	pNumberOfRepeats);
 			if (isDebugPrintout())
