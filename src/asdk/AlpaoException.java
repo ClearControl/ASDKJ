@@ -18,6 +18,7 @@ public class AlpaoException extends RuntimeException
 	 * Constructs an instance of AlpaoException class given an error message.
 	 * 
 	 * @param pExceptionMessage
+	 *          exception message
 	 */
 	public AlpaoException(String pExceptionMessage)
 	{
@@ -29,7 +30,9 @@ public class AlpaoException extends RuntimeException
 	 * and a cause.
 	 * 
 	 * @param pExceptionMessage
+	 *          exception message
 	 * @param pException
+	 *          causative exception
 	 */
 	public AlpaoException(String pExceptionMessage,
 													Throwable pException)
