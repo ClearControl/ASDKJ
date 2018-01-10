@@ -113,7 +113,7 @@ def getVersionName = {
 }
 
 group = 'net.clearcontrol'
-version = getVersionName()
+version = "1.0.2-RH"
 
 artifacts
 {
