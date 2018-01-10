@@ -116,6 +116,64 @@ public class AlpaoDeformableMirror implements AutoCloseable
 		return true;
 	}
 
+	public boolean resetDAC() {
+		if (isDebugPrintout())
+			System.out.println("ASDKLibrary.asdkSet(...DacReset...1");
+		ASDKLibrary.asdkSet(mDevicePointer,
+												Pointer.pointerToCString("DacReset"),
+												1);
+		if (isDebugPrintout())
+			printLastError();
+
+		final String lLastErrorString = getLastErrorString();
+		if (isError(lLastErrorString))
+			return false;
+
+		return true;
+	}
+
+	public boolean setLogPrintLevel(int level) {
+		if (level <0 || level > 4)
+		{
+			if (isDebugPrintout())
+			{
+				System.out.println("LogPrintLevel " + level + " must be between 0 and 4!");
+				return false;
+			}
+		}
+
+		if (isDebugPrintout())
+			System.out.println("ASDKLibrary.asdkSet(...LogPrintLevel..." + level);
+
+		ASDKLibrary.asdkSet(mDevicePointer,
+												Pointer.pointerToCString("LogPrintLevel"),
+												level);
+
+
+		final Pointer<Double> lLogPrintLevel = Pointer.allocateDouble();
+		if (isDebugPrintout())
+			System.out.println("ASDKLibrary.asdkGet(...LogPrintLevel...");
+		ASDKLibrary.asdkGet(mDevicePointer,
+												Pointer.pointerToCString("LogPrintLevel"),
+												lLogPrintLevel);
+
+		if (isDebugPrintout())
+			printLastError();
+		final int lNumberOfActuators = (int) lLogPrintLevel.getDouble();
+		lLogPrintLevel.release();
+		if (isDebugPrintout())
+			System.out.println("LogPrintLevel=" + lNumberOfActuators);
+
+		if (isDebugPrintout())
+			printLastError();
+
+		final String lLastErrorString = getLastErrorString();
+		if (isError(lLastErrorString))
+			return false;
+
+		return true;
+	}
+
 	public boolean sendFlatMirrorShapeVector()
 	{
 		final int lMatrixHeightWidth = AlpaoDeformableMirrorsSpecifications.getFullMatrixHeightWidth(getNumberOfActuators());
