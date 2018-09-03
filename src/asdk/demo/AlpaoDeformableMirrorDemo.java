@@ -6,58 +6,62 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
 import asdk.AlpaoDeformableMirror;
 import asdk.TriggerMode;
+
+import org.junit.Test;
 
 public class AlpaoDeformableMirrorDemo
 {
 
-	@Test
-	public void demo() throws IOException, InterruptedException
-	{
-		String lSerialName = "BIL118\0";
+  @Test
+  public void demo() throws IOException, InterruptedException
+  {
+    String lSerialName = "BIL118\0";
 
-		AlpaoDeformableMirror lAlpaoDeformableMirror = new AlpaoDeformableMirror(lSerialName);
-		lAlpaoDeformableMirror.setDebugPrintout(true);
+    AlpaoDeformableMirror lAlpaoDeformableMirror =
+                                                 new AlpaoDeformableMirror(lSerialName);
+    lAlpaoDeformableMirror.setDebugPrintout(true);
 
-		assertTrue(lAlpaoDeformableMirror.open());
+    assertTrue(lAlpaoDeformableMirror.open());
 
-		int lNumberOfActuators = lAlpaoDeformableMirror.getNumberOfActuators();
-		assertEquals(97, lNumberOfActuators);
+    int lNumberOfActuators =
+                           lAlpaoDeformableMirror.getNumberOfActuators();
+    assertEquals(97, lNumberOfActuators);
 
-		assertTrue(lAlpaoDeformableMirror.setInputTriggerMode(TriggerMode.Disabled));
+    assertTrue(lAlpaoDeformableMirror.setInputTriggerMode(TriggerMode.Disabled));
 
-		for (int j = 0; j < 100; j++)
-		{
-			double[] lMirrorShape = new double[lNumberOfActuators];
-			for (int i = 0; i < lNumberOfActuators; i++)
-				lMirrorShape[i] = 0.1 * (2 * random() - 1);
+    for (int j = 0; j < 100; j++)
+    {
+      double[] lMirrorShape = new double[lNumberOfActuators];
+      for (int i = 0; i < lNumberOfActuators; i++)
+        lMirrorShape[i] = 0.1 * (2 * random() - 1);
 
-			assertTrue(lAlpaoDeformableMirror.sendRawMirrorShapeVector(lMirrorShape));
-			Thread.sleep(100);
-		}
+      assertTrue(lAlpaoDeformableMirror.sendRawMirrorShapeVector(lMirrorShape));
+      Thread.sleep(100);
+    }
 
-		int lNumberOfMirrorShapes = 100;
-		double[] lMultipleMirrorShapes = new double[lNumberOfActuators * lNumberOfMirrorShapes];
+    int lNumberOfMirrorShapes = 100;
+    double[] lMultipleMirrorShapes =
+                                   new double[lNumberOfActuators
+                                              * lNumberOfMirrorShapes];
 
-		for (int i = 0; i < lMultipleMirrorShapes.length; i++)
-			lMultipleMirrorShapes[i] = 0.01 * (2 * random() - 1);
+    for (int i = 0; i < lMultipleMirrorShapes.length; i++)
+      lMultipleMirrorShapes[i] = 0.01 * (2 * random() - 1);
 
-		/*
-		assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
-																																							lNumberOfMirrorShapes,
-																																							1));
+    /*
+    assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
+    																																					lNumberOfMirrorShapes,
+    																																					1));
+    
+    // assertTrue(lAlpaoDeformableMirror.setInputTriggerMode(TriggerMode.RisingEdge));
+    
+    assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
+    																																					lNumberOfMirrorShapes,
+    																																					1));
+    																																					/**/
 
-		// assertTrue(lAlpaoDeformableMirror.setInputTriggerMode(TriggerMode.RisingEdge));
+    lAlpaoDeformableMirror.close();
 
-		assertTrue(lAlpaoDeformableMirror.sendMirrorShapeSequenceAsynchronously(	lMultipleMirrorShapes,
-																																							lNumberOfMirrorShapes,
-																																							1));
-																																							/**/
-
-		lAlpaoDeformableMirror.close();
-
-	}
+  }
 }
